@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {getPosMoviles} from '../functions/monitor'
 import L from 'leaflet';
+import { useNavigate } from 'react-router-dom'
 
 
 import { MapContainer, TileLayer, useMap, Marker,Popup,LayersControl } from 'react-leaflet'
@@ -43,29 +44,6 @@ const capaMovil = [
     }
 ]
 
-const posMov = [
-    {
-        asset_id: "5cf536b12eadd",
-        nombre_ref: "AQUAMARINE",
-        timestamp: "2023-01-04 10:45:00",
-        latitud: "-42.4478",
-        longitud: "-72.788",
-        velocidad: null,
-        direccion: null,
-        timezone: 0
-    },
-    {
-        asset_id: "5cf539bf33ff5",
-        nombre_ref: "DON YUYO",
-        timestamp: "2023-01-04 10:48:03",
-        latitud: "-43.1239",
-        longitud: "-73.6212",
-        velocidad: null,
-        direccion: null,
-        timezone: 0
-    }
-
-]
 
 const posEst = [
     {
@@ -102,9 +80,11 @@ const Home = () => {
     
     const {monitorId,hash,capaId} = useParams()
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         loadposmoviles()
-    },[])
+    },[navigate])
 
     const puertoVerdeSVG = `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
     <g id="svg_5">
@@ -142,7 +122,7 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             <div>
             <MapContainer
             center={[-41.4906, -72.92951]}
-            zoom={8}
+            zoom={7}
             scrollWheelZoom={false}
             style={{ height: '100vh', width: '100wh' }}
             >
@@ -165,7 +145,7 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
 {posMoviles.map(c => (
     <Marker position={[c[0].latitud, c[0].longitud]}>
       <Popup>
-        {c.nombre_ref}
+        {c[0].nombre_ref}
       </Popup>
     </Marker>))}
         </MapContainer></div>

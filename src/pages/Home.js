@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
+
 const monitoresDB = [
     {
         _id : '4',
@@ -36,7 +37,6 @@ const Home = () => {
 
     
     const [monitores,setMonitores] = useState(monitoresDB)
-
 
     return (
         <div className="pt-3 mb-5 ">
