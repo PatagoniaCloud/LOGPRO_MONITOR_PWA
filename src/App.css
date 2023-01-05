@@ -1,0 +1,38 @@
+
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: local("Orbitron"),
+   url("./fonts/Orbitron.ttf") format("truetype")
+  }
+
+  .Orbitron {
+    font-family: "Orbitron"
+  }
+
+
+
+.navMonitor{
+  background-color: rgb(244, 244, 244);
+}
+
+.navMonitor li{
+  text-decoration: none;
+}
+
+.navMonitor a {
+  color: black;
+}
+
+
+
+.row{
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  padding: 0px !important;
+}
