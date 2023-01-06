@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import {Link, useParams} from 'react-router-dom'
-import {getPosMoviles} from '../functions/monitor'
+import {getPosMoviles, getPosEstaticos} from '../functions/monitor'
 import L from 'leaflet';
 import { useNavigate } from 'react-router-dom'
 
 
-import { MapContainer, TileLayer, useMap, Marker,Popup,LayersControl } from 'react-leaflet'
+import { MapContainer, TileLayer, useMap, Marker,Popup,LayersControl,LayerGroup,Circle } from 'react-leaflet'
 
 
 
@@ -45,29 +45,6 @@ const capaMovil = [
 ]
 
 
-const posEst = [
-    {
-        id: 9163,
-        nombre: "Ã‘ilque Chilebreed",
-        data_coordenadas: "-40.72516132694476,-72.43446332002425"
-    },
-    {
-        id: 9164,
-        nombre: "Charleo S.Dalcahue",
-        data_coordenadas: "-39.12613720943851,-72.62975507494835"
-    },
-    {
-        id: 9165,
-        nombre: "Pisc. Lleuque (Cherquenco) S.Dalcahue",
-        data_coordenadas: "-39.7263,-72.05026388888889"
-    },
-    {
-        id: 9166,
-        nombre: "Pisc.Gorbea S.Dalcahue",
-        data_coordenadas: "-39.14965427746829,-72.65142909313541"
-    }
-]
-
 const Home = () => {
 
     const [monitor,setMonitor] = useState(monitoresDB)
@@ -75,7 +52,7 @@ const Home = () => {
 
     
     const [posMoviles,setPosMoviles] = useState([])
-    const [posEstaticos,setPosEstaticos] = useState(posEst)
+    const [posEstaticos,setPosEstaticos] = useState([])
 
     
     const {monitorId,hash,capaId} = useParams()
@@ -84,6 +61,7 @@ const Home = () => {
 
     useEffect(() => {
         loadposmoviles()
+        loadposestaticos()
     },[navigate])
 
     const puertoVerdeSVG = `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +75,11 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             iconUrl: puertoVerdeSVGUrl,
             iconSize: [40, 25],
         });
+
+        
+
     const loadposmoviles = () => getPosMoviles(monitorId,hash,capaId).then(c => setPosMoviles(c.data))
+    const loadposestaticos = () => getPosEstaticos(monitorId,hash,capaId).then(c => setPosEstaticos(c.data))
    
     const mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
     const mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
@@ -109,13 +91,13 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             <ul class="nav justify-content-center navMonitor">
             
             <li class="nav-item">
-                <Link class="nav-link" href="#">Mapas</Link>
+                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>MAPAS</Link>
             </li>
             <li class="nav-item">
-                <Link class="nav-link" href="#">Tracks Activos</Link>
+                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>TRACKS</Link>
             </li>
             <li class="nav-item">
-                <Link class="nav-link" href="#">Restricciones</Link>
+                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>RESTRICCIONES</Link>
             </li>
             </ul>
             </div>
@@ -133,10 +115,21 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             accessToken={mapboxToken}
           />
           <LayersControl position="topright">
+          <LayersControl.Overlay checked name="Layer group with circles">
+        <LayerGroup>
           
+          <LayerGroup>
+            <Circle
+              center={[51.51, -0.08]}
+              pathOptions={{ color: 'green', fillColor: 'green' }}
+              radius={100}
+            />
+          </LayerGroup>
+        </LayerGroup>
+      </LayersControl.Overlay>
           </LayersControl>
           {posEstaticos.map(c => (
-          <Marker icon={iconoPuertoVerde} position={[c.data_coordenadas.split(',')[0], c.data_coordenadas.split(',')[1]]}>
+          <Marker icon={iconoPuertoVerde} position={[c[0].data_coordenadas.split(',')[0], c[0].data_coordenadas.split(',')[1]]}>
             <Popup>
               {c.nombre}
             </Popup>

@@ -40,16 +40,16 @@ const Header = () => {
     
     return (
         
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark" >
+        <nav className="navbar navbar-expand-lg navbar-dark navPat" >
         <a className="navbar-brand Orbitron" style={{color:'white'}}  href="/">Monitor Log<span style={{fontWeight: '800'}}>Pro</span></a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav ml-auto">
+          <ul className="navbar-nav ">
           <li class="nav-item dropdown ">
             <a style={{color:'white'}} class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Monitores
+              MONITORES
             </a>
             <div class="dropdown-menu " aria-labelledby="navbarDropdown">
               {monitores.map(c=>(
