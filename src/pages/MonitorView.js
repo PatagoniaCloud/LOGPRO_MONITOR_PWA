@@ -64,6 +64,10 @@ const Home = () => {
         loadposestaticos()
     },[navigate])
 
+
+    //Iconos para Marcadores en Mapa
+
+    //Icono 
     const puertoVerdeSVG = `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
     <g id="svg_5">
         <path id="svg_4" fill="#24E711" stroke="black" stroke-width="35" d="m284.32248,383.34052c0,0 108.72562,-182.14384 110.42551,-261.14989c1.23282,-57.01979 -44.70624,-104.29561 -102.51938,-105.50738c-57.81305,-1.21177 -105.75076,44.09697 -106.97943,101.11675c-1.7041,79.00191 99.0733,265.54051 99.0733,265.54051z"/>
@@ -88,16 +92,16 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
     return (
         <div>
             <div>
-            <ul class="nav justify-content-center navMonitor">
+            <ul className="nav justify-content-center navMonitor">
             
-            <li class="nav-item">
-                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>MAPAS</Link>
+            <li className="nav-item">
+                <Link className="nav-link" href="#" style={{fontWeight:'600'}}>MAPAS</Link>
             </li>
-            <li class="nav-item">
-                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>TRACKS</Link>
+            <li className="nav-item">
+                <Link className="nav-link" href="#" style={{fontWeight:'600'}}>TRACKS</Link>
             </li>
-            <li class="nav-item">
-                <Link class="nav-link" href="#" style={{fontWeight:'600'}}>RESTRICCIONES</Link>
+            <li className="nav-item">
+                <Link className="nav-link" href="#" style={{fontWeight:'600'}}>RESTRICCIONES</Link>
             </li>
             </ul>
             </div>
@@ -106,7 +110,7 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             center={[-41.4906, -72.92951]}
             zoom={7}
             scrollWheelZoom={false}
-            style={{ height: '100vh', width: '100wh' }}
+            style={{ height: '86vh', width: '100wh' }}
             >
           <TileLayer
             attribution={mapboxAttribution}
