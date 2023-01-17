@@ -38,7 +38,7 @@ return (
             
         <div className="card-body"><h6 className="card-subtitle mb-2  Orbitron" style={{fontWeight:'600',letterSpacing:'2px',textAlign:'left'}}><MonitorIcon />   {c.empresa} </h6><hr/>
             
-            <Link  to={`/monitor/${c._id}/${c.token}/1`} className="btn btn-dark mt-2 w-100" style={{fontWeight:'600'}}>Ir a Monitor {c._id}  </Link>
+            <Link  to={`/${c._id}`} className="btn btn-dark mt-2 w-100" style={{fontWeight:'600'}}>Ir a Monitor {c._id}  </Link>
         </div>
 
         </div>

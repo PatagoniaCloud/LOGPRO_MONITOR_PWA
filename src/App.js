@@ -115,7 +115,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route exact path='/' element={<Home/>} />
-        <Route exact path='/monitor/:monitorId/:hash/:capaId' element={<MonitorView/>} />
+        <Route exact path='/:monitorId' element={<MonitorView/>} />
       </Routes>
     </Fragment>
   );

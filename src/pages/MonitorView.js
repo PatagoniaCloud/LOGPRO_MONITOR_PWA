@@ -3,6 +3,9 @@ import {Link, useParams} from 'react-router-dom'
 import {getPosMoviles, getPosEstaticos} from '../functions/monitor'
 import L from 'leaflet';
 import { useNavigate } from 'react-router-dom'
+import { useLiveQuery } from "dexie-react-hooks";
+
+import {db} from '../db'
 
 
 import { MapContainer, TileLayer, useMap, Marker,Popup,LayersControl,LayerGroup,Circle } from 'react-leaflet'
@@ -47,50 +50,71 @@ const capaMovil = [
 
 const Home = () => {
 
-    const [monitor,setMonitor] = useState(monitoresDB)
-    const [capasMov,setCapasMov] = useState(capaMovil)
+  const [monitor,setMonitor] = useState(monitoresDB)
+  const [capasMov,setCapasMov] = useState(capaMovil)
+
+  
+  const [posMoviles,setPosMoviles] = useState([])
+  const [posEstaticos,setPosEstaticos] = useState([])
+
+  
+  const {monitorId} = useParams()
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+      loadposmoviles()
+      //loadposestaticos()
+  },[navigate])
 
     
-    const [posMoviles,setPosMoviles] = useState([])
-    const [posEstaticos,setPosEstaticos] = useState([])
+  
+  useEffect(() => {
+
+    const getIndexedDB = async() => {
+      let allMonitores = await db.monitores.where({id:parseInt(monitorId)}).toArray()
+      setMonitor(allMonitores)
+    }
+
+    getIndexedDB()
 
     
-    const {monitorId,hash,capaId} = useParams()
+    console.log('nuevo monitor')
 
-    const navigate = useNavigate()
+  },[navigate])
 
-    useEffect(() => {
-        loadposmoviles()
-        loadposestaticos()
-    },[navigate])
+  
 
 
-    //Iconos para Marcadores en Mapa
 
-    //Icono 
-    const puertoVerdeSVG = `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
-    <g id="svg_5">
-        <path id="svg_4" fill="#24E711" stroke="black" stroke-width="35" d="m284.32248,383.34052c0,0 108.72562,-182.14384 110.42551,-261.14989c1.23282,-57.01979 -44.70624,-104.29561 -102.51938,-105.50738c-57.81305,-1.21177 -105.75076,44.09697 -106.97943,101.11675c-1.7041,79.00191 99.0733,265.54051 99.0733,265.54051z"/>
-    </g>
-</svg>`;
-const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).replace('#', '%23');
+  //Iconos para Marcadores en Mapa
 
- const iconoPuertoVerde = L.icon({
+  //Icono 
+  const puertoVerdeSVG = `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+  <g id="svg_5">
+      <path id="svg_4" fill="#24E711" stroke="black" stroke-width="35" d="m284.32248,383.34052c0,0 108.72562,-182.14384 110.42551,-261.14989c1.23282,-57.01979 -44.70624,-104.29561 -102.51938,-105.50738c-57.81305,-1.21177 -105.75076,44.09697 -106.97943,101.11675c-1.7041,79.00191 99.0733,265.54051 99.0733,265.54051z"/>
+  </g>
+  </svg>`;
+  const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).replace('#', '%23');
+
+  const iconoPuertoVerde = L.icon({
             iconUrl: puertoVerdeSVGUrl,
             iconSize: [40, 25],
         });
 
-        
 
-    const loadposmoviles = () => getPosMoviles(monitorId,hash,capaId).then(c => setPosMoviles(c.data))
-    const loadposestaticos = () => getPosEstaticos(monitorId,hash,capaId).then(c => setPosEstaticos(c.data))
-   
-    const mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
-    const mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-    const mapboxToken = 'pk.eyJ1IjoicGF0YWdvbmlhY2xvdWQiLCJhIjoiY2p2Y2t5NDlzMDN4YTQ0cGxzeXpzNHlldyJ9.npDBOov6yxChmfccZn0Vsg';
 
-    return (
+  const loadposmoviles = () => getPosMoviles(monitorId,monitor.token,1).then(c => setPosMoviles(c.data))
+  //const loadposestaticos = () => getPosEstaticos(monitorId,hash,capaId).then(c => setPosEstaticos(c.data))
+  
+  const mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
+  const mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+  const mapboxToken = 'pk.eyJ1IjoicGF0YWdvbmlhY2xvdWQiLCJhIjoiY2p2Y2t5NDlzMDN4YTQ0cGxzeXpzNHlldyJ9.npDBOov6yxChmfccZn0Vsg';
+
+
+  return (
         <div>
+          {JSON.stringify(monitor)}
             <div>
             <ul className="nav justify-content-center navMonitor">
             
@@ -101,7 +125,7 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
                 <Link className="nav-link" href="#" style={{fontWeight:'600'}}>TRACKS</Link>
             </li>
             <li className="nav-item">
-                <Link className="nav-link" href="#" style={{fontWeight:'600'}}>RESTRICCIONES</Link>
+                <Link className="nav-link" to={`/${parseInt(monitorId)}/restricciones`} style={{fontWeight:'600'}}>RESTRICCIONES</Link>
             </li>
             </ul>
             </div>
@@ -119,18 +143,16 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             accessToken={mapboxToken}
           />
           <LayersControl position="topright">
-          <LayersControl.Overlay checked name="Layer group with circles">
-        <LayerGroup>
-          
-          <LayerGroup>
-            <Circle
-              center={[51.51, -0.08]}
-              pathOptions={{ color: 'green', fillColor: 'green' }}
-              radius={100}
-            />
-          </LayerGroup>
-        </LayerGroup>
-      </LayersControl.Overlay>
+                <LayersControl.Overlay checked name="Unidades Moviles">
+                    <LayerGroup>
+                    {posMoviles?.map(c => (
+                  <Marker position={[c[0].latitud, c[0].longitud]}>
+                    <Popup>
+                      {c[0].nombre_ref}
+                    </Popup>
+                  </Marker>))}
+                    </LayerGroup>
+            </LayersControl.Overlay>
           </LayersControl>
           {posEstaticos.map(c => (
           <Marker icon={iconoPuertoVerde} position={[c[0].data_coordenadas.split(',')[0], c[0].data_coordenadas.split(',')[1]]}>
@@ -139,12 +161,7 @@ const puertoVerdeSVGUrl = encodeURI("data:image/svg+xml," + puertoVerdeSVG).repl
             </Popup>
           </Marker>))}
           
-{posMoviles.map(c => (
-    <Marker position={[c[0].latitud, c[0].longitud]}>
-      <Popup>
-        {c[0].nombre_ref}
-      </Popup>
-    </Marker>))}
+
         </MapContainer></div>
         </div>
     )

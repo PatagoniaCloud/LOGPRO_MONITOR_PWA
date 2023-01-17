@@ -31,7 +31,7 @@ const Header = () => {
           </a>
           <div className="dropdown-menu " aria-labelledby="navbarDropdown">
             {monitorData?.map(c=>(
-              <Link className="dropdown-item" key={c._id}  to={`/monitor/${c._id}/${c.token}/1`}>Monitor: {c._id} {c.empresa}</Link>
+              <Link className="dropdown-item" key={c._id}  to={`/${c._id}`}>Monitor: {c._id} {c.empresa}</Link>
             ))}
           </div>
         </li>
